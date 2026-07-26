@@ -3,8 +3,8 @@ CXX = g++
 CC  = gcc
 
 # Flags
-CXXFLAGS = -std=c++23 -Wall -Wextra -I./src/include
-CFLAGS   = -Wall -Wextra -I./src/include
+CXXFLAGS = -std=c++23 -Wall -Wextra -I./include
+CFLAGS   = -Wall -Wextra -I./include
 
 # Libraries
 LIBS = -lglfw -lGL -lm -ldl
