@@ -3,7 +3,7 @@
 
 int main() {
     Engine::Application application;
-    application.startScreen();
+    application.run();
 
     return 0;
 }
