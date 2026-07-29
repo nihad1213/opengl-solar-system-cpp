@@ -84,7 +84,7 @@ namespace Engine {
 
     void Application::mainLoop() {
         while (!glfwWindowShouldClose(window)) {
-            glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
+            glClearColor(0.0f, 0.470f, 0.509f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             glfwSwapBuffers(window);
