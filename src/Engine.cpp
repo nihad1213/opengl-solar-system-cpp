@@ -86,7 +86,6 @@ namespace Engine {
         while (!glfwWindowShouldClose(window)) {
             glClearColor(0.0f, 0.470f, 0.509f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
-
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
