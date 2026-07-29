@@ -10,11 +10,9 @@ namespace Planet {
             Planet();
             ~Planet();
 
-            void render();
 
         protected:
-            void update();
-            void draw();
+
     };
 
 }
