@@ -4,7 +4,7 @@
 
 namespace Engine {
 
-    Application::Application() : window(nullptr), width(1360), height(780), title("Solar System") {}
+    Application::Application() : window(nullptr), width(1240), height(680), title("Solar System") {}
 
     Application::~Application() {
         shutdown();
@@ -82,7 +82,7 @@ namespace Engine {
     }
 
     void Application::mainLoop() {
-        Sphere::Sphere testSphere(0.7f, 20, 20);
+        Sphere::Sphere testSphere(0.7f, 70, 70);
 
         while (!glfwWindowShouldClose(window)) {
             glClearColor(0.0f, 0.470f, 0.509f, 1.0f);
