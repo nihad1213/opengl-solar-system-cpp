@@ -1,10 +1,22 @@
 #include "Engine.hpp"
 #include "Sphere.hpp"
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
 namespace Engine {
 
-    Application::Application() : window(nullptr), width(1240), height(680), title("Solar System") {}
+    Application::Application() : 
+        window(nullptr),
+        width(1240), 
+        height(680), 
+        title("Solar System"),
+        camera(glm::vec3(0.0f, 0.0f, 5.0f)),
+        deltaTime(0.0f), 
+        lastFrame(0.0f),
+        lastX(1240.0f / 2.0f), 
+        lastY(680.0f / 2.0f), 
+        firstMouse(true) 
+    {}
 
     Application::~Application() {
         shutdown();
@@ -68,6 +80,11 @@ namespace Engine {
         }
 
         glfwMakeContextCurrent(window);
+
+        glfwSetWindowUserPointer(window, this);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetCursorPosCallback(window, mouseCallback);
+        
         return true;
     }
 
@@ -85,6 +102,12 @@ namespace Engine {
         Sphere::Sphere testSphere(0.7f, 70, 70);
 
         while (!glfwWindowShouldClose(window)) {
+            float currentFrame = static_cast<float>(glfwGetTime());
+            deltaTime = currentFrame - lastFrame;
+            lastFrame = currentFrame;
+
+            processInput(window);
+            
             glClearColor(0.0f, 0.470f, 0.509f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
@@ -94,11 +117,10 @@ namespace Engine {
             glFrustum(-0.1f * aspect, 0.1f * aspect, -0.1f, 0.1f, 0.1f, 100.0f);
 
             glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
+            glm::mat4 view = camera.getViewMatrix();
+            glLoadMatrixf(glm::value_ptr(view));
 
-            glTranslatef(0.0f, 0.0f, -2.5f);
-
-            glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
+            // glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
             glRotatef((float)glfwGetTime() * 20.0f, 0.0f, 1.0f, 0.0f);
 
             testSphere.draw();
@@ -114,5 +136,41 @@ namespace Engine {
             window = nullptr;
         }
         glfwTerminate();
+    }
+
+    void Application::processInput(GLFWwindow* window) {
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+            glfwSetWindowShouldClose(window, true);
+
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+            camera.processKeyboard(Camera::FORWARD, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+            camera.processKeyboard(Camera::BACKWARD, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+            camera.processKeyboard(Camera::LEFT, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+            camera.processKeyboard(Camera::RIGHT, deltaTime);
+    }
+
+    void Application::mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
+        auto* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+        if (!app) return;
+
+        float xpos = static_cast<float>(xposIn);
+        float ypos = static_cast<float>(yposIn);
+
+        if (app->firstMouse) {
+            app->lastX = xpos;
+            app->lastY = ypos;
+            app->firstMouse = false;
+        }
+
+        float xoffset = xpos - app->lastX;
+        float yoffset = app->lastY - ypos;
+
+        app->lastX = xpos;
+        app->lastY = ypos;
+
+        app->camera.processMouseMovement(xoffset, yoffset);
     }
 }
