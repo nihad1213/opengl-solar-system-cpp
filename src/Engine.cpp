@@ -51,7 +51,8 @@ namespace Engine {
         }
 
         glEnable(GL_DEPTH_TEST);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glEnable(GL_TEXTURE_2D);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
         return true;
     }
@@ -104,34 +105,34 @@ namespace Engine {
         std::vector<Planet::Planet> bodies;
         bodies.reserve(10);
 
-        bodies.emplace_back(1.0f, 40, 40, 0.0f, 0.0f, 2.0f, true); // Sun
+        bodies.emplace_back(1.0f, 40, 40, 0.0f, 0.0f, 2.0f, "assets/8k_sun.jpg", true); // Sun
 
-        bodies.emplace_back(0.08f, 20, 20, 1.8f, 40.0f, 10.0f); // Mercury
-        bodies.emplace_back(0.15f, 24, 24, 2.4f, 30.0f, 8.0f);  // Venus
+        bodies.emplace_back(0.08f, 20, 20, 1.8f, 40.0f, 10.0f, "assets/8k_mercury.jpg"); // Mercury
+        bodies.emplace_back(0.15f, 24, 24, 2.4f, 30.0f, 8.0f, "assets/4k_venus_atmosphere.jpg");  // Venus
 
-        bodies.emplace_back(0.16f, 24, 24, 3.0f, 24.0f, 50.0f); // Earth
-        bodies.back().addSatellite(Planet::Planet(0.05f, 14, 14, 0.35f, 120.0f, 20.0f)); // Moon
+        bodies.emplace_back(0.16f, 24, 24, 3.0f, 24.0f, 50.0f, "assets/8k_earth_daymap.jpg"); // Earth
+        bodies.back().addSatellite(Planet::Planet(0.05f, 14, 14, 0.35f, 120.0f, 20.0f, "assets/8k_moon.jpg")); // Moon
 
-        bodies.emplace_back(0.12f, 20, 20, 3.6f, 18.0f, 48.0f); // Mars
-        bodies.back().addSatellite(Planet::Planet(0.02f, 10, 10, 0.20f, 150.0f, 30.0f));  // Phobos
-        bodies.back().addSatellite(Planet::Planet(0.015f, 10, 10, 0.28f, 130.0f, 25.0f)); // Deimos
+        bodies.emplace_back(0.12f, 20, 20, 3.6f, 18.0f, 48.0f, "assets/8k_mars.jpg"); // Mars
+        bodies.back().addSatellite(Planet::Planet(0.02f, 10, 10, 0.20f, 150.0f, 30.0f, "assets/phobos.png"));  // Phobos
+        bodies.back().addSatellite(Planet::Planet(0.015f, 10, 10, 0.28f, 130.0f, 25.0f, "assets/deimos.jpg")); // Deimos
 
-        bodies.emplace_back(0.5f, 32, 32, 4.6f, 10.0f, 90.0f); // Jupiter
-        bodies.back().addSatellite(Planet::Planet(0.04f, 14, 14, 0.65f, 90.0f, 25.0f));  // Io
-        bodies.back().addSatellite(Planet::Planet(0.035f, 14, 14, 0.75f, 80.0f, 22.0f)); // Europa
-        bodies.back().addSatellite(Planet::Planet(0.045f, 14, 14, 0.9f, 70.0f, 20.0f));  // Ganymede
-        bodies.back().addSatellite(Planet::Planet(0.04f, 14, 14, 1.05f, 60.0f, 18.0f));  // Callisto
+        bodies.emplace_back(0.5f, 32, 32, 4.6f, 10.0f, 90.0f, "assets/8k_jupiter.jpg"); // Jupiter
+        bodies.back().addSatellite(Planet::Planet(0.04f, 14, 14, 0.65f, 90.0f, 25.0f, "assets/io.jpeg"));  // Io
+        bodies.back().addSatellite(Planet::Planet(0.035f, 14, 14, 0.75f, 80.0f, 22.0f, "assets/europa.jpeg")); // Europa
+        bodies.back().addSatellite(Planet::Planet(0.045f, 14, 14, 0.9f, 70.0f, 20.0f, "assets/genymede.jpeg"));  // Ganymede
+        bodies.back().addSatellite(Planet::Planet(0.04f, 14, 14, 1.05f, 60.0f, 18.0f, "assets/download.jpeg"));  // Callisto
 
-        bodies.emplace_back(0.45f, 32, 32, 5.8f, 8.0f, 85.0f); // Saturn
-        bodies.back().addSatellite(Planet::Planet(0.04f, 14, 14, 0.7f, 50.0f, 15.0f)); // Titan
+        bodies.emplace_back(0.45f, 32, 32, 5.8f, 8.0f, 85.0f, "assets/8k_saturn.jpg"); // Saturn
+        bodies.back().addSatellite(Planet::Planet(0.04f, 14, 14, 0.7f, 50.0f, 15.0f, "assets/221.jpg")); // Titan
 
-        bodies.emplace_back(0.3f, 28, 28, 6.8f, 6.0f, 70.0f); // Uranus
+        bodies.emplace_back(0.3f, 28, 28, 6.8f, 6.0f, 70.0f, "assets/2k_uranus.jpg"); // Uranus
 
-        bodies.emplace_back(0.29f, 28, 28, 7.6f, 5.0f, 75.0f); // Neptune
-        bodies.back().addSatellite(Planet::Planet(0.035f, 14, 14, 0.45f, 60.0f, 15.0f)); // Triton
+        bodies.emplace_back(0.29f, 28, 28, 7.6f, 5.0f, 75.0f, "assets/2k_neptune.jpg"); // Neptune
+        bodies.back().addSatellite(Planet::Planet(0.035f, 14, 14, 0.45f, 60.0f, 15.0f, "assets/triton.jpg")); // Triton
 
-        bodies.emplace_back(0.06f, 16, 16, 8.3f, 4.0f, 20.0f); // Pluto
-        bodies.back().addSatellite(Planet::Planet(0.02f, 10, 10, 0.15f, 100.0f, 12.0f)); // Charon
+        bodies.emplace_back(0.06f, 16, 16, 8.3f, 4.0f, 20.0f); // Pluto (no texture asset available)
+        bodies.back().addSatellite(Planet::Planet(0.02f, 10, 10, 0.15f, 100.0f, 12.0f, "assets/charon.jpeg")); // Charon
 
         while (!glfwWindowShouldClose(window)) {
             float currentFrame = static_cast<float>(glfwGetTime());

@@ -1,26 +1,33 @@
 #include "Sphere.hpp"
+#include "stb/stb_image.h"
 #include <cmath>
+#include <iostream>
 
 namespace Sphere {
 
-    Sphere::Sphere(float radius, unsigned int stacks, unsigned int sectors)
-    : VAO(0), VBO(0), EBO(0), indexCount(0)
+    Sphere::Sphere(float radius, unsigned int stacks, unsigned int sectors, const std::string& texturePath)
+    : VAO(0), VBO(0), EBO(0), textureID(0), indexCount(0)
     {
         drawSphere(radius, stacks, sectors);
+        if (!texturePath.empty()) {
+            loadTexture(texturePath);
+        }
     }
 
     Sphere::~Sphere() {
         if (VAO != 0) glDeleteVertexArrays(1, &VAO);
         if (VBO != 0) glDeleteBuffers(1, &VBO);
         if (EBO != 0) glDeleteBuffers(1, &EBO);
+        if (textureID != 0) glDeleteTextures(1, &textureID);
     }
 
     Sphere::Sphere(Sphere&& other) noexcept
-    : VAO(other.VAO), VBO(other.VBO), EBO(other.EBO), indexCount(other.indexCount)
+    : VAO(other.VAO), VBO(other.VBO), EBO(other.EBO), textureID(other.textureID), indexCount(other.indexCount)
     {
         other.VAO = 0;
         other.VBO = 0;
         other.EBO = 0;
+        other.textureID = 0;
         other.indexCount = 0;
     }
 
@@ -29,18 +36,50 @@ namespace Sphere {
             if (VAO != 0) glDeleteVertexArrays(1, &VAO);
             if (VBO != 0) glDeleteBuffers(1, &VBO);
             if (EBO != 0) glDeleteBuffers(1, &EBO);
+            if (textureID != 0) glDeleteTextures(1, &textureID);
 
             VAO = other.VAO;
             VBO = other.VBO;
             EBO = other.EBO;
+            textureID = other.textureID;
             indexCount = other.indexCount;
 
             other.VAO = 0;
             other.VBO = 0;
             other.EBO = 0;
+            other.textureID = 0;
             other.indexCount = 0;
         }
         return *this;
+    }
+
+    void Sphere::loadTexture(const std::string& path) {
+        stbi_set_flip_vertically_on_load(true);
+
+        int width, height, channels;
+        unsigned char* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+        if (!data) {
+            std::cerr << "[Sphere] Failed to load texture: " << path << std::endl;
+            return;
+        }
+
+        GLenum format = GL_RGB;
+        if (channels == 1) format = GL_RED;
+        else if (channels == 4) format = GL_RGBA;
+
+        glGenTextures(1, &textureID);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
     }
 
     void Sphere::drawSphere(float radius, unsigned int stacks, unsigned int sectors) {
@@ -63,6 +102,8 @@ namespace Sphere {
                     v.x = xy * std::cos(sectorAngle);
                     v.y = y;
                     v.z = xy * std::sin(sectorAngle);
+                    v.u = (float)j / sectors;
+                    v.v = (float)i / stacks;
 
                     vertices.push_back(v);
                 }
@@ -101,8 +142,11 @@ namespace Sphere {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)0);
+
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));
 
             glBindVertexArray(0);
 
@@ -110,6 +154,14 @@ namespace Sphere {
 
     void Sphere::draw() {
         glBindVertexArray(VAO);
+
+        if (textureID != 0) {
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, textureID);
+        } else {
+            glDisable(GL_TEXTURE_2D);
+        }
+
         glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }

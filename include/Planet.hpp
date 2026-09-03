@@ -3,13 +3,15 @@
 #include "Sphere.hpp"
 #include <glm/glm.hpp>
 #include <vector>
+#include <string>
 
 namespace Planet {
 
     class Planet {
         public:
             Planet(float radius, unsigned int stacks, unsigned int sectors,
-                   float orbitDistance, float orbitSpeed, float spinSpeed, bool isSun = false);
+                   float orbitDistance, float orbitSpeed, float spinSpeed,
+                   const std::string& texturePath = "", bool isSun = false);
             ~Planet();
 
             Planet(const Planet&) = delete;
@@ -31,6 +33,8 @@ namespace Planet {
             float spinSpeed;
             bool sun;
             std::vector<Planet> satellites;
+
+            void drawOrbitLine() const;
     };
 
 }
