@@ -9,7 +9,7 @@ namespace Planet {
     class Planet {
         public:
             Planet(float radius, unsigned int stacks, unsigned int sectors,
-                   float orbitDistance, float orbitSpeed, bool isSun = false);
+                   float orbitDistance, float orbitSpeed, float spinSpeed, bool isSun = false);
             ~Planet();
 
             Planet(const Planet&) = delete;
@@ -28,6 +28,7 @@ namespace Planet {
             Sphere::Sphere sphere;
             float orbitDistance;
             float orbitSpeed;
+            float spinSpeed;
             bool sun;
             std::vector<Planet> satellites;
     };

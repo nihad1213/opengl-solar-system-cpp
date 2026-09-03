@@ -5,9 +5,9 @@
 namespace Planet {
 
     Planet::Planet(float radius, unsigned int stacks, unsigned int sectors,
-                   float orbitDistance, float orbitSpeed, bool isSun)
+                   float orbitDistance, float orbitSpeed, float spinSpeed, bool isSun)
         : sphere(radius, stacks, sectors), orbitDistance(orbitDistance),
-          orbitSpeed(orbitSpeed), sun(isSun)
+          orbitSpeed(orbitSpeed), spinSpeed(spinSpeed), sun(isSun)
     {}
 
     Planet::~Planet() {}
@@ -22,7 +22,12 @@ namespace Planet {
             glRotatef(time * orbitSpeed, 0.0f, 1.0f, 0.0f);
             glTranslatef(orbitDistance, 0.0f, 0.0f);
         }
+
+        glPushMatrix();
+        glRotatef(time * spinSpeed, 0.0f, 1.0f, 0.0f);
         sphere.draw();
+        glPopMatrix();
+
         for (auto& satellite : satellites) {
             satellite.draw(time);
         }
