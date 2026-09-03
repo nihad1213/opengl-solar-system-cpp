@@ -15,6 +15,12 @@ namespace Sphere {
             Sphere(float radius = 1.0f, unsigned int stacks = 20, unsigned int sectors = 20);
             ~Sphere();
 
+            Sphere(const Sphere&) = delete;
+            Sphere& operator=(const Sphere&) = delete;
+
+            Sphere(Sphere&& other) noexcept;
+            Sphere& operator=(Sphere&& other) noexcept;
+
             void draw();
         
         private:

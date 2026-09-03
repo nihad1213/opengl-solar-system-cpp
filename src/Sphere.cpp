@@ -15,6 +15,34 @@ namespace Sphere {
         if (EBO != 0) glDeleteBuffers(1, &EBO);
     }
 
+    Sphere::Sphere(Sphere&& other) noexcept
+    : VAO(other.VAO), VBO(other.VBO), EBO(other.EBO), indexCount(other.indexCount)
+    {
+        other.VAO = 0;
+        other.VBO = 0;
+        other.EBO = 0;
+        other.indexCount = 0;
+    }
+
+    Sphere& Sphere::operator=(Sphere&& other) noexcept {
+        if (this != &other) {
+            if (VAO != 0) glDeleteVertexArrays(1, &VAO);
+            if (VBO != 0) glDeleteBuffers(1, &VBO);
+            if (EBO != 0) glDeleteBuffers(1, &EBO);
+
+            VAO = other.VAO;
+            VBO = other.VBO;
+            EBO = other.EBO;
+            indexCount = other.indexCount;
+
+            other.VAO = 0;
+            other.VBO = 0;
+            other.EBO = 0;
+            other.indexCount = 0;
+        }
+        return *this;
+    }
+
     void Sphere::drawSphere(float radius, unsigned int stacks, unsigned int sectors) {
             const float PI = 3.14159265359f;
             std::vector<Vertex> vertices;

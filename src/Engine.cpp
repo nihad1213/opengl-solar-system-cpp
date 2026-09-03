@@ -81,6 +81,7 @@ namespace Engine {
         }
 
         glfwMakeContextCurrent(window);
+        glfwSwapInterval(1);
 
         glfwSetWindowUserPointer(window, this);
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);

@@ -11,6 +11,12 @@ namespace Planet {
                    float orbitDistance, bool isSun = false);
             ~Planet();
 
+            Planet(const Planet&) = delete;
+            Planet& operator=(const Planet&) = delete;
+
+            Planet(Planet&&) noexcept = default;
+            Planet& operator=(Planet&&) noexcept = default;
+
             void draw();
 
             bool isSun() const;
