@@ -1,18 +1,25 @@
 #pragma once
 
-#include "glad/glad.h"
-#include <GLFW/glfw3.h>
+#include "Sphere.hpp"
+#include <glm/glm.hpp>
 
 namespace Planet {
 
     class Planet {
         public:
-            Planet();
+            Planet(float radius, unsigned int stacks, unsigned int sectors,
+                   float orbitDistance, bool isSun = false);
             ~Planet();
 
+            void draw();
 
-        protected:
+            bool isSun() const;
+            float getOrbitDistance() const;
 
+        private:
+            Sphere::Sphere sphere;
+            float orbitDistance;
+            bool sun;
     };
 
 }
