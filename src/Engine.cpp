@@ -101,9 +101,37 @@ namespace Engine {
     }
 
     void Application::mainLoop() {
-        std::vector<Planet::Planet> planets;
-        planets.emplace_back(1.0f, 70, 70, 0.0f, true);
-        planets.emplace_back(0.3f, 40, 40, 2.5f, false);
+        std::vector<Planet::Planet> bodies;
+        bodies.reserve(10);
+
+        bodies.emplace_back(1.0f, 40, 40, 0.0f, 0.0f, true); // Sun
+
+        bodies.emplace_back(0.08f, 20, 20, 1.8f, 40.0f); // Mercury
+        bodies.emplace_back(0.15f, 24, 24, 2.4f, 30.0f); // Venus
+
+        bodies.emplace_back(0.16f, 24, 24, 3.0f, 24.0f); // Earth
+        bodies.back().addSatellite(Planet::Planet(0.05f, 14, 14, 0.35f, 120.0f)); // Moon
+
+        bodies.emplace_back(0.12f, 20, 20, 3.6f, 18.0f); // Mars
+        bodies.back().addSatellite(Planet::Planet(0.02f, 10, 10, 0.20f, 150.0f));  // Phobos
+        bodies.back().addSatellite(Planet::Planet(0.015f, 10, 10, 0.28f, 130.0f)); // Deimos
+
+        bodies.emplace_back(0.5f, 32, 32, 4.6f, 10.0f); // Jupiter
+        bodies.back().addSatellite(Planet::Planet(0.04f, 14, 14, 0.65f, 90.0f)); // Io
+        bodies.back().addSatellite(Planet::Planet(0.035f, 14, 14, 0.75f, 80.0f)); // Europa
+        bodies.back().addSatellite(Planet::Planet(0.045f, 14, 14, 0.9f, 70.0f)); // Ganymede
+        bodies.back().addSatellite(Planet::Planet(0.04f, 14, 14, 1.05f, 60.0f)); // Callisto
+
+        bodies.emplace_back(0.45f, 32, 32, 5.8f, 8.0f); // Saturn
+        bodies.back().addSatellite(Planet::Planet(0.04f, 14, 14, 0.7f, 50.0f)); // Titan
+
+        bodies.emplace_back(0.3f, 28, 28, 6.8f, 6.0f); // Uranus
+
+        bodies.emplace_back(0.29f, 28, 28, 7.6f, 5.0f); // Neptune
+        bodies.back().addSatellite(Planet::Planet(0.035f, 14, 14, 0.45f, 60.0f)); // Triton
+
+        bodies.emplace_back(0.06f, 16, 16, 8.3f, 4.0f); // Pluto
+        bodies.back().addSatellite(Planet::Planet(0.02f, 10, 10, 0.15f, 100.0f)); // Charon
 
         while (!glfwWindowShouldClose(window)) {
             float currentFrame = static_cast<float>(glfwGetTime());
@@ -124,11 +152,8 @@ namespace Engine {
             glm::mat4 view = camera.getViewMatrix();
             glLoadMatrixf(glm::value_ptr(view));
 
-            // glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
-            glRotatef((float)glfwGetTime() * 20.0f, 0.0f, 1.0f, 0.0f);
-
-            for (auto& planet : planets) {
-                planet.draw();
+            for (auto& body : bodies) {
+                body.draw(currentFrame);
             }
 
             glfwSwapBuffers(window);
