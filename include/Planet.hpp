@@ -2,13 +2,14 @@
 
 #include "Sphere.hpp"
 #include <glm/glm.hpp>
+#include <vector>
 
 namespace Planet {
 
     class Planet {
         public:
             Planet(float radius, unsigned int stacks, unsigned int sectors,
-                   float orbitDistance, bool isSun = false);
+                   float orbitDistance, float orbitSpeed, bool isSun = false);
             ~Planet();
 
             Planet(const Planet&) = delete;
@@ -17,7 +18,8 @@ namespace Planet {
             Planet(Planet&&) noexcept = default;
             Planet& operator=(Planet&&) noexcept = default;
 
-            void draw();
+            void addSatellite(Planet&& satellite);
+            void draw(float time);
 
             bool isSun() const;
             float getOrbitDistance() const;
@@ -25,7 +27,9 @@ namespace Planet {
         private:
             Sphere::Sphere sphere;
             float orbitDistance;
+            float orbitSpeed;
             bool sun;
+            std::vector<Planet> satellites;
     };
 
 }
