@@ -1,7 +1,8 @@
 #include "Engine.hpp"
-#include "Sphere.hpp"
+#include "Planet.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <vector>
 
 namespace Engine {
 
@@ -99,7 +100,9 @@ namespace Engine {
     }
 
     void Application::mainLoop() {
-        Sphere::Sphere testSphere(0.7f, 70, 70);
+        std::vector<Planet::Planet> planets;
+        planets.emplace_back(1.0f, 70, 70, 0.0f, true);
+        planets.emplace_back(0.3f, 40, 40, 2.5f, false);
 
         while (!glfwWindowShouldClose(window)) {
             float currentFrame = static_cast<float>(glfwGetTime());
@@ -123,7 +126,9 @@ namespace Engine {
             // glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
             glRotatef((float)glfwGetTime() * 20.0f, 0.0f, 1.0f, 0.0f);
 
-            testSphere.draw();
+            for (auto& planet : planets) {
+                planet.draw();
+            }
 
             glfwSwapBuffers(window);
             glfwPollEvents();
