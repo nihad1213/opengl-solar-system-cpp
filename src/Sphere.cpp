@@ -103,7 +103,7 @@ namespace Sphere {
                     v.y = y;
                     v.z = xy * std::sin(sectorAngle);
                     v.u = (float)j / sectors;
-                    v.v = (float)i / stacks;
+                    v.v = 1.0f - (float)i / stacks;
 
                     vertices.push_back(v);
                 }

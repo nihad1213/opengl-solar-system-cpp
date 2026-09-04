@@ -105,6 +105,8 @@ namespace Engine {
         std::vector<Planet::Planet> bodies;
         bodies.reserve(10);
 
+        // Sizes/distances are hand-tuned for visibility, not to real-world scale -
+        // true planet-to-orbit ratios make every planet but the sun sub-pixel.
         bodies.emplace_back(1.0f, 40, 40, 0.0f, 0.0f, 2.0f, "assets/8k_sun.jpg", true); // Sun
 
         bodies.emplace_back(0.08f, 20, 20, 1.8f, 40.0f, 10.0f, "assets/8k_mercury.jpg"); // Mercury
@@ -125,6 +127,7 @@ namespace Engine {
 
         bodies.emplace_back(0.45f, 32, 32, 5.8f, 8.0f, 85.0f, "assets/8k_saturn.jpg"); // Saturn
         bodies.back().addSatellite(Planet::Planet(0.04f, 14, 14, 0.7f, 50.0f, 15.0f, "assets/221.jpg")); // Titan
+        bodies.back().addRing(0.54f, 1.035f, "assets/8k_saturn_ring_alpha.png"); // Rings: ~1.2x-2.3x Saturn's radius, matching the real ring span
 
         bodies.emplace_back(0.3f, 28, 28, 6.8f, 6.0f, 70.0f, "assets/2k_uranus.jpg"); // Uranus
 

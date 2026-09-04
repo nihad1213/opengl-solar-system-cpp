@@ -18,6 +18,10 @@ namespace Planet {
         satellites.push_back(std::move(satellite));
     }
 
+    void Planet::addRing(float innerRadius, float outerRadius, const std::string& texturePath) {
+        ring = std::make_unique<Ring::Ring>(innerRadius, outerRadius, 128, texturePath);
+    }
+
     void Planet::drawOrbitLine() const {
         const float PI = 3.14159265359f;
         const int segments = 64;
@@ -47,6 +51,10 @@ namespace Planet {
         glRotatef(time * spinSpeed, 0.0f, 1.0f, 0.0f);
         sphere.draw();
         glPopMatrix();
+
+        if (ring) {
+            ring->draw();
+        }
 
         for (auto& satellite : satellites) {
             satellite.draw(time);

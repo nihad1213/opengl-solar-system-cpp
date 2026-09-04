@@ -4,7 +4,7 @@ namespace Camera {
 
     Camera::Camera(glm::vec3 startPos, glm::vec3 startUp, float startYaw, float startPitch)
         : front(glm::vec3(0.0f, 0.0f, -1.0f)), 
-          movementSpeed(3.0f), 
+          movementSpeed(3.0f),
           mouseSensitivity(0.1f) 
     {
         position = startPos;
